@@ -5,6 +5,12 @@ class Three3dWrapper:
     def __init__(self):
         self.shapes = []
 
+    def _handleSuccess(self, shape : str):
+        return {
+            "status": "success",
+            "message": f"Added shape {shape}"
+        }
+
     def addBox(self, boxConfig : BoxShape):
         boxShape = o3d.geometry.TriangleMesh.create_box(width = boxConfig.width, height = boxConfig.height, depth = boxConfig.depth)
         boxShape.translate([boxConfig.x, boxConfig.y, boxConfig.z])
@@ -12,6 +18,7 @@ class Three3dWrapper:
         boxShape.compute_vertex_normals()
         boxShape.paint_uniform_color([boxConfig.colorX, boxConfig.colorY, boxConfig.colorZ])
         self.shapes.append(boxShape)
+        return self._handleSuccess("box")
 
     def addSphere(self, sphereConfig : SphereConfig):
         sphereShape = o3d.geometry.TriangleMesh.create_sphere(radius = sphereConfig.radius, resolution = sphereConfig.resolution)
@@ -20,6 +27,7 @@ class Three3dWrapper:
         sphereShape.compute_vertex_normals()
         sphereShape.paint_uniform_color([sphereConfig.colorX, sphereConfig.colorY, sphereConfig.colorZ])
         self.shapes.append(sphereShape)
+        return self._handleSuccess("sphere")
     
     def addCylinder(self, cylinderConfig : CylinderConfig):
         cylinderShape = o3d.geometry.TriangleMesh.create_cylinder(radius = cylinderConfig.radius, height = cylinderConfig.height)
@@ -27,7 +35,8 @@ class Three3dWrapper:
         cylinderShape.rotate([cylinderConfig.rotationXInRadians, cylinderConfig.rotationYInRadians, cylinderConfig.rotationZInRadians])
         cylinderShape.compute_vertex_normals()
         cylinderShape.paint_uniform_color([cylinderConfig.colorX, cylinderConfig.colorY, cylinderConfig.colorZ])
-        self.shapes.append(cylinderShape)    
+        self.shapes.append(cylinderShape)  
+        return self._handleSuccess("cylinder")  
 
     def addCustomShape(self, customShapeConfig : CustomShapesConfig):
         customShape = o3d.geometry.TriangleMesh()
@@ -38,6 +47,8 @@ class Three3dWrapper:
         customShape.compute_vertex_normals()
         customShape.paint_uniform_color([customShapeConfig.colorX, customShapeConfig.colorY, customShapeConfig.colorZ])
         self.shapes.append(customShape)    
+        return self._handleSuccess("customshape")
 
     def render(self):
         o3d.visualization.draw_geometries(self.shapes)
+        return self._handleSuccess("rendered all")
