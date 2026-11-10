@@ -1,10 +1,10 @@
-from pydantic import BaseModel 
+from pydantic import BaseModel, Field 
 from typing import List 
 
 class BoxShape(BaseModel):
-    width : int 
-    height : int 
-    depth : int 
+    width : float = Field(default = 1.0, gt = 0)
+    height : float = Field(default = 1.0, gt = 0)
+    depth : float = Field(default = 1.0, gt = 0)
     x : int 
     y : int 
     z : int 

@@ -32,7 +32,7 @@ class Three3dWrapper:
         return self._handleSuccess("sphere")
     
     def addCylinder(self, cylinderConfig : CylinderConfig):
-        cylinderShape = o3d.geometry.TriangleMesh.create_cylinder(radius = cylinderConfig.radius, height = cylinderConfig.height)
+        cylinderShape = o3d.geometry.TriangleMesh.create_cylinder(radius = cylinderConfig.radius, height = cylinderConfig.height, resolution = 100, split = 4)
         cylinderShape.translate([cylinderConfig.x, cylinderConfig.y, cylinderConfig.z])
         angles = np.radians([cylinderConfig.rotationXInRadians, cylinderConfig.rotationYInRadians, cylinderConfig.rotationZInRadians]).astype(np.float64)
         cylinderShape.rotate(cylinderShape.get_rotation_matrix_from_xyz(angles))
@@ -43,8 +43,8 @@ class Three3dWrapper:
 
     def addCustomShape(self, customShapeConfig : CustomShapesConfig):
         customShape = o3d.geometry.TriangleMesh()
-        customShape.vertices = o3d.utility.Vector3dVector(customShapeConfig.vertices)
-        customShape.triangles = o3d.utility.Vector3iVector(customShapeConfig.triangles)
+        customShape.vertices = o3d.utility.Vector3dVector([[vertex.x, vertex.y, vertex.z] for vertex in customShapeConfig.vertices])
+        customShape.triangles = o3d.utility.Vector3iVector([[triangle.x, triangle.y, triangle.z] for triangle in customShapeConfig.triangles])
         customShape.translate([customShapeConfig.x, customShapeConfig.y, customShapeConfig.z])
         angles = np.radians([customShapeConfig.rotationXInRadians, customShapeConfig.rotationYInRadians, customShapeConfig.rotationZInRadians]).astype(np.float64)
         customShape.rotate(customShape.get_rotation_matrix_from_xyz(angles))
@@ -54,5 +54,5 @@ class Three3dWrapper:
         return self._handleSuccess("customshape")
 
     def render(self):
-        o3d.visualization.draw_geometries(self.shapes)
+        o3d.visualization.draw_geometries(self.shapes, zoom=0.7, front=[1, 1, 0.8], lookat=[0, 0, 0], up=[0, 0, 1])
         return self._handleSuccess("rendered all")
