@@ -22,3 +22,11 @@ def addCustomShape(customShapeConfig : CustomShapesConfig):
 def render():
     print(f"Calling render tool")
     return three3DWrapper.render()
+
+def getTools():
+    return [
+        addSphere, 
+        addBox, 
+        addCustomShape,
+        addCylinder 
+    ]
